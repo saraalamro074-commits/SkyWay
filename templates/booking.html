@@ -1,0 +1,669 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>حجز الرحلة - SkyWay</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e0f2fe,
+                    #f8fafc
+                );
+
+            color: #164e63;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           MENU BUTTON
+        ========================= */
+
+        .menu-button {
+
+            position: fixed;
+
+            top: 20px;
+            right: 20px;
+
+            width: 50px;
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #164e63;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+            z-index: 1001;
+
+            box-shadow:
+                0 5px 15px
+                rgba(0,0,0,0.15);
+        }
+
+
+        .menu-button:hover {
+            background: #0e7490;
+        }
+
+
+        /* =========================
+           SIDE MENU
+        ========================= */
+
+        .side-menu {
+
+            position: fixed;
+
+            top: 0;
+
+            right: -300px;
+
+            width: 280px;
+
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 25px
+                rgba(0,0,0,0.15);
+
+            z-index: 1000;
+
+            padding: 30px 20px;
+
+            transition: right 0.3s ease;
+        }
+
+
+        .side-menu.open {
+            right: 0;
+        }
+
+
+        .side-logo {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #164e63;
+
+            margin-bottom: 40px;
+        }
+
+
+        .menu-item {
+
+            display: block;
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+
+        .menu-item:hover {
+
+            background: #e0f2fe;
+
+            color: #0e7490;
+        }
+
+
+        .menu-admin {
+
+            margin-top: 20px;
+
+            background: #164e63;
+
+            color: white;
+        }
+
+
+        .menu-admin:hover {
+
+            background: #0e7490;
+
+            color: white;
+        }
+
+
+        /* =========================
+           OVERLAY
+        ========================= */
+
+        .overlay {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background:
+                rgba(0,0,0,0.35);
+
+            z-index: 999;
+
+            display: none;
+        }
+
+
+        .overlay.show {
+            display: block;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 600px;
+
+            margin: 50px auto;
+
+            padding-bottom: 40px;
+        }
+
+
+        .booking-box {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0,0,0,0.10);
+        }
+
+
+        h1,
+        h2 {
+
+            text-align: center;
+        }
+
+
+        h1 {
+
+            margin-top: 0;
+
+            font-size: 30px;
+        }
+
+
+        h2 {
+
+            font-size: 22px;
+        }
+
+
+        .description {
+
+            text-align: center;
+
+            color: #64748b;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           SELECTED FLIGHT
+        ========================= */
+
+        .selected-flight {
+
+            background: #e0f2fe;
+
+            border:
+                1px solid #bae6fd;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            margin: 25px 0;
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-top: 12px;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 8px;
+
+            margin-bottom: 12px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #0e7490;
+        }
+
+
+        /* =========================
+           SUBMIT BUTTON
+        ========================= */
+
+        button.submit-button {
+
+            width: 100%;
+
+            background: #164e63;
+
+            color: white;
+
+            border: none;
+
+            padding: 14px;
+
+            border-radius: 9px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 10px;
+        }
+
+
+        button.submit-button:hover {
+
+            background: #0e7490;
+        }
+
+
+        /* =========================
+           BACK
+        ========================= */
+
+        .home {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .home:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .container {
+
+                width: 94%;
+
+                margin-top: 90px;
+            }
+
+
+            .booking-box {
+
+                padding: 25px;
+            }
+
+
+            .side-menu {
+
+                width: 260px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         MENU BUTTON
+    ========================= -->
+
+    <button
+        class="menu-button"
+        onclick="openMenu()"
+        aria-label="فتح القائمة"
+    >
+        ☰
+    </button>
+
+
+    <!-- =========================
+         SIDE MENU
+    ========================= -->
+
+    <div
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="side-logo">
+            ✈️ SkyWay
+        </div>
+
+
+        <a
+            href="/"
+            class="menu-item"
+        >
+            🏠 الرئيسية
+        </a>
+
+
+        <a
+            href="/flights"
+            class="menu-item"
+        >
+            ✈️ الرحلات
+        </a>
+
+
+        <a
+            href="/booking"
+            class="menu-item"
+        >
+            🎫 حجز جديد
+        </a>
+
+
+        <a
+            href="/admin"
+            class="menu-item menu-admin"
+        >
+            📊 لوحة الإدارة
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         OVERLAY
+    ========================= -->
+
+    <div
+        class="overlay"
+        id="overlay"
+        onclick="closeMenu()"
+    ></div>
+
+
+    <!-- =========================
+         BOOKING PAGE
+    ========================= -->
+
+    <div class="container">
+
+
+        <div class="booking-box">
+
+
+            <h1>
+                🎫 حجز الرحلة
+            </h1>
+
+
+            <h2>
+                ✈️ SkyWay
+            </h2>
+
+
+            <p class="description">
+                أدخل بيانات المسافر لإتمام الحجز
+            </p>
+
+
+            <div class="selected-flight">
+
+                ✈️ الرحلة المختارة:
+
+                {{ request.args.get('flight') }}
+
+            </div>
+
+
+            <form
+                action="/booking-success"
+                method="POST"
+            >
+
+
+                <input
+                    type="hidden"
+                    name="flight"
+                    value="{{ request.args.get('flight') }}"
+                >
+
+
+                <label>
+                    الاسم الكامل:
+                </label>
+
+                <input
+                    type="text"
+                    name="passenger_name"
+                    required
+                >
+
+
+                <label>
+                    رقم الهاتف:
+                </label>
+
+                <input
+                    type="tel"
+                    name="phone"
+                    required
+                >
+
+
+                <label>
+                    البريد الإلكتروني:
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                >
+
+
+                <label>
+                    رقم جواز السفر:
+                </label>
+
+                <input
+                    type="text"
+                    name="passport"
+                    required
+                >
+
+
+                <label>
+                    عدد المسافرين:
+                </label>
+
+                <input
+                    type="number"
+                    name="passengers"
+                    min="1"
+                    value="1"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    تأكيد الحجز 🎫
+                </button>
+
+
+            </form>
+
+
+            <a
+                href="/flights"
+                class="home"
+            >
+                ← العودة إلى الرحلات
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        function openMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .add("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .add("show");
+        }
+
+
+        function closeMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .remove("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .remove("show");
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```

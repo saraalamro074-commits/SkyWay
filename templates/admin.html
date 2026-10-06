@@ -1,0 +1,1059 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة الإدارة - SkyWay</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f1f5f9;
+
+            color: #164e63;
+        }
+
+
+        /* =========================
+           MENU BUTTON
+        ========================= */
+
+        .menu-button {
+
+            position: fixed;
+
+            top: 18px;
+
+            right: 20px;
+
+            width: 50px;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #164e63;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+            z-index: 1001;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.15);
+        }
+
+
+        .menu-button:hover {
+
+            background: #0e7490;
+        }
+
+
+        /* =========================
+           SIDE MENU
+        ========================= */
+
+        .side-menu {
+
+            position: fixed;
+
+            top: 0;
+
+            right: -300px;
+
+            width: 280px;
+
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 25px rgba(0,0,0,0.15);
+
+            z-index: 1000;
+
+            padding: 30px 20px;
+
+            transition: right 0.3s ease;
+        }
+
+
+        .side-menu.open {
+
+            right: 0;
+        }
+
+
+        .side-logo {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #164e63;
+
+            margin-bottom: 40px;
+        }
+
+
+        .menu-item {
+
+            display: block;
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+
+        .menu-item:hover {
+
+            background: #e0f2fe;
+
+            color: #0e7490;
+        }
+
+
+        .menu-admin {
+
+            background: #164e63;
+
+            color: white;
+        }
+
+
+        .menu-admin:hover {
+
+            background: #0e7490;
+
+            color: white;
+        }
+
+
+        /* =========================
+           OVERLAY
+        ========================= */
+
+        .overlay {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background: rgba(0,0,0,0.35);
+
+            z-index: 999;
+
+            display: none;
+        }
+
+
+        .overlay.show {
+
+            display: block;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+
+            width: 94%;
+
+            max-width: 1250px;
+
+            margin: 0 auto;
+
+            padding: 90px 0 40px;
+        }
+
+
+        .header {
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 32px;
+
+            color: #164e63;
+        }
+
+
+        .header p {
+
+            color: #64748b;
+
+            margin-top: 8px;
+        }
+
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.06);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+        }
+
+
+        .stat-icon {
+
+            width: 60px;
+
+            height: 60px;
+
+            border-radius: 14px;
+
+            background: #e0f2fe;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 30px;
+        }
+
+
+        .stat-title {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .stat-number {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #164e63;
+        }
+
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-box {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.06);
+
+            margin-bottom: 20px;
+        }
+
+
+        .search-form {
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .search-form input {
+
+            flex: 1;
+
+            padding: 13px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+        }
+
+
+        .search-form input:focus {
+
+            outline: none;
+
+            border-color: #0e7490;
+        }
+
+
+        .search-button {
+
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 0 25px;
+
+            background: #164e63;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .search-button:hover {
+
+            background: #0e7490;
+        }
+
+
+        .clear-button {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 0 18px;
+
+            border-radius: 9px;
+
+            background: #e2e8f0;
+
+            color: #334155;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-box {
+
+            background: white;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.06);
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 900px;
+
+            table-layout: fixed;
+        }
+
+
+        th {
+
+            background: #164e63;
+
+            color: white;
+
+            padding: 14px 8px;
+
+            font-size: 14px;
+        }
+
+
+        td {
+
+            padding: 13px 8px;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            word-break: break-word;
+        }
+
+
+        tr:hover td {
+
+            background: #f8fafc;
+        }
+
+
+        /* COLUMN WIDTHS */
+
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 55px;
+        }
+
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 130px;
+        }
+
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 110px;
+        }
+
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 170px;
+        }
+
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 150px;
+        }
+
+
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 65px;
+        }
+
+
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 125px;
+        }
+
+
+        th:nth-child(8),
+        td:nth-child(8) {
+            width: 80px;
+        }
+
+
+        th:nth-child(9),
+        td:nth-child(9) {
+            width: 170px;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-block;
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 6px;
+        }
+
+
+        .details-button,
+        .delete-button {
+
+            border: none;
+
+            border-radius: 7px;
+
+            padding: 8px 10px;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+        }
+
+
+        .details-button {
+
+            background: #e0f2fe;
+
+            color: #164e63;
+        }
+
+
+        .details-button:hover {
+
+            background: #bae6fd;
+        }
+
+
+        .delete-button {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+
+        .delete-button:hover {
+
+            background: #fecaca;
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            padding: 50px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .main {
+
+                width: 92%;
+
+                padding-top: 85px;
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .search-form {
+
+                flex-direction: column;
+            }
+
+
+            .search-button {
+
+                padding: 13px;
+            }
+
+
+            .clear-button {
+
+                padding: 13px;
+            }
+
+
+            .header h1 {
+
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- MENU BUTTON -->
+
+    <button
+        class="menu-button"
+        onclick="openMenu()"
+    >
+        ☰
+    </button>
+
+
+    <!-- SIDE MENU -->
+
+    <div
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="side-logo">
+            ✈️ SkyWay
+        </div>
+
+
+        <a
+            href="/"
+            class="menu-item"
+        >
+            🏠 الرئيسية
+        </a>
+
+
+        <a
+            href="/flights"
+            class="menu-item"
+        >
+            ✈️ الرحلات
+        </a>
+
+
+        <a
+            href="/booking"
+            class="menu-item"
+        >
+            🎫 حجز جديد
+        </a>
+
+
+        <a
+            href="/admin"
+            class="menu-item menu-admin"
+        >
+            📊 لوحة الإدارة
+        </a>
+
+    </div>
+
+
+    <!-- OVERLAY -->
+
+    <div
+        class="overlay"
+        id="overlay"
+        onclick="closeMenu()"
+    ></div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <div class="header">
+
+            <h1>
+                📊 لوحة الإدارة
+            </h1>
+
+            <p>
+                إدارة ومتابعة حجوزات SkyWay
+            </p>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🎫
+                </div>
+
+                <div>
+
+                    <div class="stat-title">
+                        إجمالي الحجوزات
+                    </div>
+
+                    <div class="stat-number">
+                        {{ total_bookings }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+
+                    <div class="stat-title">
+                        إجمالي المسافرين
+                    </div>
+
+                    <div class="stat-number">
+                        {{ total_passengers }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <form
+                action="/admin"
+                method="GET"
+                class="search-form"
+            >
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="🔍 ابحث بالاسم، الهاتف، البريد، رقم الحجز أو الرحلة..."
+                >
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    بحث
+                </button>
+
+
+                {% if search %}
+
+                <a
+                    href="/admin"
+                    class="clear-button"
+                >
+                    مسح
+                </a>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-box">
+
+
+            {% if bookings %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            رقم
+                        </th>
+
+                        <th>
+                            المسافر
+                        </th>
+
+                        <th>
+                            الهاتف
+                        </th>
+
+                        <th>
+                            البريد
+                        </th>
+
+                        <th>
+                            الرحلة
+                        </th>
+
+                        <th>
+                            العدد
+                        </th>
+
+                        <th>
+                            التاريخ
+                        </th>
+
+                        <th>
+                            الحالة
+                        </th>
+
+                        <th>
+                            الإجراءات
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr>
+
+                        <td>
+                            #{{ booking.id }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.passenger_name }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.phone }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.email }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.flight }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.passengers }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.booking_date }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="status">
+                                ✓ مؤكد
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+
+                                <a
+                                    href="/admin/booking/{{ booking.id }}"
+                                    class="details-button"
+                                >
+                                    👁️ تفاصيل
+                                </a>
+
+
+                                <form
+                                    action="/admin/delete/{{ booking.id }}"
+                                    method="POST"
+                                    style="margin:0;"
+                                    onsubmit="return confirm('هل أنت متأكد من حذف هذا الحجز؟');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="delete-button"
+                                    >
+                                        🗑️ حذف
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            {% else %}
+
+            <div class="empty">
+
+                📭 لا توجد حجوزات حاليًا
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function openMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .add("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .add("show");
+
+        }
+
+
+        function closeMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .remove("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .remove("show");
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```

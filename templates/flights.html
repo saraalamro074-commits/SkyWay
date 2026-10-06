@@ -1,0 +1,1414 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>الرحلات - SkyWay</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e0f2fe,
+                    #f8fafc
+                );
+
+            color: #164e63;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           MENU BUTTON
+        ========================= */
+
+        .menu-button {
+            position: fixed;
+
+            top: 20px;
+            right: 20px;
+
+            width: 50px;
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #164e63;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+            z-index: 1001;
+
+            box-shadow:
+                0 5px 15px
+                rgba(0,0,0,0.15);
+        }
+
+        .menu-button:hover {
+            background: #0e7490;
+        }
+
+
+        /* =========================
+           SIDE MENU
+        ========================= */
+
+        .side-menu {
+
+            position: fixed;
+
+            top: 0;
+            right: -300px;
+
+            width: 280px;
+
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 25px
+                rgba(0,0,0,0.15);
+
+            z-index: 1000;
+
+            padding: 30px 20px;
+
+            transition: right 0.3s ease;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .side-logo {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #164e63;
+
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+
+            display: block;
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .menu-item:hover {
+
+            background: #e0f2fe;
+
+            color: #0e7490;
+        }
+
+        .menu-admin {
+
+            margin-top: 20px;
+
+            background: #164e63;
+
+            color: white;
+        }
+
+        .menu-admin:hover {
+
+            background: #0e7490;
+
+            color: white;
+        }
+
+
+        /* =========================
+           OVERLAY
+        ========================= */
+
+        .overlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background:
+                rgba(0,0,0,0.35);
+
+            z-index: 999;
+
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1050px;
+
+            margin: 50px auto;
+
+            padding-bottom: 40px;
+        }
+
+
+        .header {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+
+            margin: 0 0 10px;
+
+            font-size: 30px;
+        }
+
+        .header p {
+
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           SEARCH INFO
+        ========================= */
+
+        .search-info {
+
+            background: #e0f2fe;
+
+            border:
+                1px solid #bae6fd;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            text-align: center;
+
+            color: #164e63;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           FLIGHTS
+        ========================= */
+
+        .flights {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .flight-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 7px 25px
+                rgba(0,0,0,0.08);
+
+            transition: 0.2s;
+        }
+
+
+        .flight-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.12);
+        }
+
+
+        .route {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+
+        .route-arrow {
+
+            color: #0e7490;
+
+            font-size: 24px;
+        }
+
+
+        .flight-info {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .info {
+
+            background: #f8fafc;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            text-align: center;
+        }
+
+
+        .info-title {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .info-value {
+
+            font-weight: bold;
+
+            color: #164e63;
+
+        }
+
+
+        .price {
+
+            text-align: center;
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+            color: #0e7490;
+
+            margin-bottom: 15px;
+        }
+
+
+        .book-button {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #164e63;
+
+            color: white;
+
+            text-decoration: none;
+
+            text-align: center;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .book-button:hover {
+
+            background: #0e7490;
+        }
+
+
+        .back {
+
+            display: block;
+
+            width: fit-content;
+
+            margin: 30px auto 0;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .flights {
+
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+
+                width: 94%;
+
+                margin-top: 90px;
+            }
+
+            .header h1 {
+
+                font-size: 25px;
+            }
+
+            .side-menu {
+
+                width: 260px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         MENU BUTTON
+    ========================= -->
+
+    <button
+        class="menu-button"
+        onclick="openMenu()"
+        aria-label="فتح القائمة"
+    >
+        ☰
+    </button>
+
+
+    <!-- =========================
+         SIDE MENU
+    ========================= -->
+
+    <div
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="side-logo">
+            ✈️ SkyWay
+        </div>
+
+
+        <a
+            href="/"
+            class="menu-item"
+        >
+            🏠 الرئيسية
+        </a>
+
+
+        <a
+            href="/flights"
+            class="menu-item"
+        >
+            ✈️ الرحلات
+        </a>
+
+
+        <a
+            href="/booking"
+            class="menu-item"
+        >
+            🎫 حجز جديد
+        </a>
+
+
+        <a
+            href="/admin"
+            class="menu-item menu-admin"
+        >
+            📊 لوحة الإدارة
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         OVERLAY
+    ========================= -->
+
+    <div
+        class="overlay"
+        id="overlay"
+        onclick="closeMenu()"
+    ></div>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <div class="container">
+
+
+        <div class="header">
+
+            <h1>
+                ✈️ الرحلات المتاحة
+            </h1>
+
+            <p>
+                اختر الرحلة المناسبة لك وأكمل الحجز بسهولة
+            </p>
+
+        </div>
+
+
+        {% if from_city or to_city %}
+
+        <div class="search-info">
+
+            🔎 نتائج البحث:
+
+            {% if from_city %}
+                من <strong>{{ from_city }}</strong>
+            {% endif %}
+
+            {% if to_city %}
+                إلى <strong>{{ to_city }}</strong>
+            {% endif %}
+
+            {% if travel_date %}
+                — 📅 {{ travel_date }}
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="flights">
+
+
+            <!-- =========================
+                 FLIGHT 1
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "إسطنبول") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    إسطنبول
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            10:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            13:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            15/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            25
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    150 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - إسطنبول"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 2
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "دبي") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    دبي
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            14:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            18:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            15/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            18
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    120 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - دبي"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 3
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "القاهرة") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    القاهرة
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            18:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            19:30
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            15/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            30
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    90 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - القاهرة"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 4
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "الدوحة") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    الدوحة
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            09:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            11:30
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            16/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            22
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    135 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - الدوحة"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 5
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "الرياض") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    الرياض
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            11:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            13:15
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            16/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            20
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    110 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - الرياض"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 6
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "جدة") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    جدة
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            16:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            18:20
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            16/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            27
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    105 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - جدة"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 7
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "أبوظبي") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    أبوظبي
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            19:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            23:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            17/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            16
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    125 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - أبوظبي"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 FLIGHT 8
+            ========================= -->
+
+            {% if not from_city or
+                  (from_city == "عمّان" and to_city == "بيروت") %}
+
+            <div class="flight-card">
+
+                <div class="route">
+
+                    عمّان
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    بيروت
+
+                </div>
+
+
+                <div class="flight-info">
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            وقت المغادرة
+                        </span>
+
+                        <span class="info-value">
+                            08:00
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            الوصول
+                        </span>
+
+                        <span class="info-value">
+                            09:15
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            التاريخ
+                        </span>
+
+                        <span class="info-value">
+                            17/10/2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span class="info-title">
+                            المقاعد
+                        </span>
+
+                        <span class="info-value">
+                            24
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="price">
+                    75 JOD
+                </div>
+
+
+                <a
+                    href="/booking?flight=عمّان - بيروت"
+                    class="book-button"
+                >
+                    🎫 احجز الآن
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <a
+            href="/"
+            class="back"
+        >
+            ← العودة إلى الصفحة الرئيسية
+        </a>
+
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        function openMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .add("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .add("show");
+        }
+
+
+        function closeMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .remove("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .remove("show");
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```

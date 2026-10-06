@@ -1,0 +1,699 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SkyWay - حجز الرحلات الجوية</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e0f2fe,
+                    #f8fafc
+                );
+
+            color: #164e63;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        /* =========================
+           MENU BUTTON
+        ========================= */
+
+        .menu-button {
+            position: fixed;
+
+            top: 20px;
+            right: 20px;
+
+            width: 50px;
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #164e63;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+            z-index: 1001;
+
+            box-shadow:
+                0 5px 15px
+                rgba(0,0,0,0.15);
+        }
+
+
+        .menu-button:hover {
+            background: #0e7490;
+        }
+
+
+        /* =========================
+           SIDE MENU
+        ========================= */
+
+        .side-menu {
+
+            position: fixed;
+
+            top: 0;
+            right: -300px;
+
+            width: 280px;
+
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 25px
+                rgba(0,0,0,0.15);
+
+            z-index: 1000;
+
+            padding: 30px 20px;
+
+            transition: right 0.3s ease;
+        }
+
+
+        .side-menu.open {
+            right: 0;
+        }
+
+
+        .side-logo {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #164e63;
+
+            margin-bottom: 40px;
+        }
+
+
+        .menu-item {
+
+            display: block;
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+
+        .menu-item:hover {
+
+            background: #e0f2fe;
+
+            color: #0e7490;
+        }
+
+
+        .menu-admin {
+
+            margin-top: 20px;
+
+            background: #164e63;
+
+            color: white;
+        }
+
+
+        .menu-admin:hover {
+
+            background: #0e7490;
+
+            color: white;
+        }
+
+
+        /* =========================
+           DARK OVERLAY
+        ========================= */
+
+        .overlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background:
+                rgba(0,0,0,0.35);
+
+            z-index: 999;
+
+            display: none;
+        }
+
+
+        .overlay.show {
+            display: block;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 850px;
+
+            background: white;
+
+            padding: 45px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.12);
+
+            text-align: center;
+        }
+
+
+        .logo {
+
+            font-size: 42px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+
+        h1 {
+
+            font-size: 32px;
+
+            margin: 10px 0;
+        }
+
+
+        .subtitle {
+
+            font-size: 18px;
+
+            color: #64748b;
+
+            margin-bottom: 35px;
+        }
+
+
+        /* =========================
+           SEARCH BOX
+        ========================= */
+
+        .search-box {
+
+            background-color: #f8fafc;
+
+            padding: 30px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid #e2e8f0;
+        }
+
+
+        .fields {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+
+            text-align: right;
+        }
+
+
+        .field {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        label {
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        select,
+        input {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            background-color: white;
+        }
+
+
+        select:focus,
+        input:focus {
+
+            outline: none;
+
+            border-color: #0e7490;
+        }
+
+
+        /* =========================
+           SEARCH BUTTON
+        ========================= */
+
+        .search-button {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background-color: #164e63;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .search-button:hover {
+
+            background-color: #0e7490;
+        }
+
+
+        /* =========================
+           ALL FLIGHTS
+        ========================= */
+
+        .flights-button {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            color: #164e63;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .flights-button:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .container {
+
+                padding: 25px;
+
+                margin-top: 30px;
+            }
+
+
+            .fields {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .logo {
+
+                font-size: 34px;
+            }
+
+
+            h1 {
+
+                font-size: 25px;
+            }
+
+
+            .side-menu {
+
+                width: 260px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         MENU BUTTON
+    ========================= -->
+
+    <button
+        class="menu-button"
+        onclick="openMenu()"
+        aria-label="فتح القائمة"
+    >
+        ☰
+    </button>
+
+
+    <!-- =========================
+         SIDE MENU
+    ========================= -->
+
+    <div
+        class="side-menu"
+        id="sideMenu"
+    >
+
+        <div class="side-logo">
+            ✈️ SkyWay
+        </div>
+
+
+        <a
+            href="/"
+            class="menu-item"
+        >
+            🏠 الرئيسية
+        </a>
+
+
+        <a
+            href="/flights"
+            class="menu-item"
+        >
+            ✈️ الرحلات
+        </a>
+
+
+        <a
+            href="/booking"
+            class="menu-item"
+        >
+            🎫 حجز جديد
+        </a>
+
+
+        <a
+            href="/admin"
+            class="menu-item menu-admin"
+        >
+            📊 لوحة الإدارة
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         OVERLAY
+    ========================= -->
+
+    <div
+        class="overlay"
+        id="overlay"
+        onclick="closeMenu()"
+    ></div>
+
+
+    <!-- =========================
+         MAIN PAGE
+    ========================= -->
+
+    <div class="container">
+
+
+        <div class="logo">
+            ✈️ SkyWay
+        </div>
+
+
+        <h1>
+            نظام حجز الرحلات الجوية
+        </h1>
+
+
+        <p class="subtitle">
+            احجز رحلتك بسهولة وأمان
+        </p>
+
+
+        <div class="search-box">
+
+
+            <form
+                action="/flights"
+                method="GET"
+            >
+
+
+                <div class="fields">
+
+
+                    <div class="field">
+
+                        <label>
+                            من:
+                        </label>
+
+                        <select name="from">
+
+                            <option value="عمّان">
+                                عمّان
+                            </option>
+
+                            <option value="دبي">
+                                دبي
+                            </option>
+
+                            <option value="إسطنبول">
+                                إسطنبول
+                            </option>
+
+                            <option value="القاهرة">
+                                القاهرة
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            إلى:
+                        </label>
+
+                        <select name="to">
+
+                            <option value="دبي">
+                                دبي
+                            </option>
+
+                            <option value="إسطنبول">
+                                إسطنبول
+                            </option>
+
+                            <option value="القاهرة">
+                                القاهرة
+                            </option>
+
+                            <option value="عمّان">
+                                عمّان
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            تاريخ السفر:
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            عدد المسافرين:
+                        </label>
+
+                        <input
+                            type="number"
+                            name="passengers"
+                            min="1"
+                            value="1"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    🔎 البحث عن الرحلات
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+        <a
+            href="/flights"
+            class="flights-button"
+        >
+            ✈️ عرض جميع الرحلات
+        </a>
+
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        function openMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .add("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .add("show");
+        }
+
+
+        function closeMenu() {
+
+            document
+                .getElementById("sideMenu")
+                .classList
+                .remove("open");
+
+            document
+                .getElementById("overlay")
+                .classList
+                .remove("show");
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```
